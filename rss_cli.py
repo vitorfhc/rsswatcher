@@ -27,6 +27,7 @@ Optional:
 import argparse
 import shelve
 import sys
+import os
 
 
 def add_feed(db_path, name, url):
@@ -131,9 +132,13 @@ def main():
     )
 
     # List command (read)
-    parser_list = subparsers.add_parser("list", help="List all feeds")
+    subparsers.add_parser("list", help="List all feeds")
 
     args = parser.parse_args()
+
+    if not os.path.exists(args.db):
+        with shelve.open(args.db):
+            pass
 
     if args.command == "add":
         add_feed(args.db, args.name, args.url)
